@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Book } from "src/books/entities/book.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
@@ -11,7 +12,11 @@ export class Category {
     @Column('text')
     name:string
     
-    // @Column('text')
     // books:string uno a muchos
+    @OneToMany(()=>Book, (book)=>book.category,{
+        eager:true,
+        cascade:true,
+    })
+    books:Book[]
 
 }

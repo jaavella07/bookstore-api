@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { Book } from "src/books/entities/book.entity"
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity()
 export class Review {
@@ -13,4 +14,10 @@ export class Review {
     rating: string[]
 
     // books: string de uno a muchos
+    @OneToMany(() => Book, (book) => book.review, {
+        eager: true,
+        cascade: true,
+    })
+    books: Book[]
+
 }

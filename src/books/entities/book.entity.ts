@@ -1,4 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Author } from "src/authors/entities/author.entity";
+import { Category } from "src/categories/entities/category.entity";
+import { Review } from "src/reviews/entities/review.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
@@ -14,8 +17,24 @@ export class Book {
     description: string
     
     // author: string => de muchos a uno
+    @ManyToOne(() => Author, (author) => author.books,{
+        eager: true,
+        cascade: true,
+    })
+    author: Author
+
 
     // category: string = de muchos a uno
+    @ManyToOne(() => Category, (category) => category.books,{
+        eager: true,
+        cascade: true,
+    })
+    category: Category
     
     // reviews: string =de muchos a uno
+    @ManyToOne(() => Review, (review) => review.books,{
+        eager: true,
+        cascade: true,
+    })
+    review: Review
 }
