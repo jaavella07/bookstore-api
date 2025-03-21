@@ -14,7 +14,7 @@ async function bootstrap() {
     })
    );
 
-  // await app.listen(`Server is runnung on ${process.env.PORT}`);
+  //  await app.listen(`Server is runnung on ${process.env.PORT || 3000}`);
   await app.listen(process.env.PORT);
   
 }

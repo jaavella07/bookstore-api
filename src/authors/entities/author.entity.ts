@@ -15,10 +15,10 @@ export class Author {
     bio: string
     
     // books: string uno a muchos
-    @OneToMany(() => Book, (book) => book.author,{
-        cascade: true,
-        eager: true
-    })
-    books: Book[]
+    // @OneToMany(() => Book, (book) => book.author,{
+    //     cascade: true,
+    //     eager: true
+    // })
+    // books: Book[]
 
 }

@@ -14,10 +14,10 @@ export class Review {
     rating: string[]
 
     // books: string de uno a muchos
-    @OneToMany(() => Book, (book) => book.review, {
-        eager: true,
-        cascade: true,
-    })
-    books: Book[]
+    // @OneToMany(() => Book, (book) => book.review, {
+    //     eager: true,
+    //     cascade: true,
+    // })
+    // books: Book[]
 
 }
