@@ -13,10 +13,7 @@ export class Category {
     name:string
     
     // books:string uno a muchos
-    // @OneToMany(()=>Book, (book)=>book.category,{
-    //     eager:true,
-    //     cascade:true,
-    // })
-    // books:Book[]
+    @OneToMany(()=>Book, (book)=>book.category,)
+    books:Book[]
 
 }

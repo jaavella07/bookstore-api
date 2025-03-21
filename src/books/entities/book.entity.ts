@@ -12,29 +12,20 @@ export class Book {
 
     @Column('text')
     title: string
-    
+
     @Column('text')
     description: string
-    
-    // // author: string => de muchos a uno
-    // @ManyToOne(() => Author, (author) => author.books,{
-    //     eager: true,
-    //     cascade: true,
-    // })
-    // author: Author
+
+    // author: string => de muchos a uno
+    @ManyToOne(() => Author, (author) => author.books)
+    author: Author
 
 
-    // // category: string = de muchos a uno
-    // @ManyToOne(() => Category, (category) => category.books,{
-    //     eager: true,
-    //     cascade: true,
-    // })
-    // category: Category
-    
+    // category: string = de muchos a uno
+    @ManyToOne(() => Category, (category) => category.books,)
+    category: Category
+
     // // reviews: string =de muchos a uno
-    // @ManyToOne(() => Review, (review) => review.books,{
-    //     eager: true,
-    //     cascade: true,
-    // })
-    // review: Review
+    @ManyToOne(() => Review, (review) => review.books)
+    review: Review
 }
