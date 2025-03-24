@@ -1,26 +1,54 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
+import { Review } from './entities/review.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ReviewsService {
+
+  constructor(
+    @InjectRepository(Review)
+    private reviewRepository: Repository<Review>
+  ) { }
+
   create(createReviewDto: CreateReviewDto) {
-    return 'This action adds a new review';
+
+    const review = this.reviewRepository.create(createReviewDto)
+    return this.reviewRepository.save(review);
   }
 
-  findAll() {
-    return `This action returns all reviews`;
+  async findAll() {
+    return await this.reviewRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} review`;
+  async findOne(id: string) {
+
+    const review = await this.reviewRepository.findOne({
+      where: { id },
+    });
+    if (!review) throw new NotFoundException('Review not found');
+    return review;
   }
 
-  update(id: number, updateReviewDto: UpdateReviewDto) {
-    return `This action updates a #${id} review`;
+  async update(id: string, updateReviewDto: UpdateReviewDto) {
+    const review = await this.reviewRepository.findOne({
+      where: { id },
+    });
+
+    if (!review) throw new NotFoundException('Review not found');
+
+    Object.assign(review, updateReviewDto);
+    return this.reviewRepository.save(review);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} review`;
+  async remove(id: string) {
+
+    const review = await this.findOne(id)
+    this.reviewRepository.remove(review)
+    return {
+      message: 'Review removed'
+    }
   }
 }

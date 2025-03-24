@@ -1,12 +1,13 @@
-import { IsArray, IsString, MinLength } from "class-validator"
+import { IsArray, IsNotEmpty, IsString, MinLength } from "class-validator"
 
 
 export class CreateReviewDto {
 
     @IsString()
-    @MinLength(5)
+    @MinLength(3)
     comment: string
 
     @IsArray()
+    @IsNotEmpty()
     rating: string[]
 }
