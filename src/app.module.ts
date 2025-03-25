@@ -6,6 +6,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CommonModule } from './common/common.module';
 
 
 @Module({
@@ -27,7 +28,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     BooksModule,
     AuthorsModule,
     CategoriesModule,
-    ReviewsModule
+    ReviewsModule,
+    CommonModule
   ],
   controllers: [],
   providers: [],

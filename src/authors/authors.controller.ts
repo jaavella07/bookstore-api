@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseUUIDPipe } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Controller('authors')
 
@@ -15,8 +16,8 @@ export class AuthorsController {
   }
 
   @Get()
-  findAll() {
-    return this.authorsService.findAll();
+  findAll( @Query() paginationDto:PaginationDto) {
+    return this.authorsService.findAll(paginationDto);
   }
 
   @Get(':id')
@@ -25,7 +26,7 @@ export class AuthorsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthorDto: UpdateAuthorDto) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateAuthorDto: UpdateAuthorDto) {
     return this.authorsService.update(id, updateAuthorDto);
   }
 

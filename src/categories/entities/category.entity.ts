@@ -7,13 +7,15 @@ export class Category {
 
 
     @PrimaryGeneratedColumn('uuid')
-    id:string
+    id: string
 
-    @Column('text')
-    name:string
-    
+    @Column('text', {
+        unique: true
+    })
+    name: string
+
     // books:string uno a muchos
-    @OneToMany(()=>Book, (book)=>book.category,)
-    books:Book[]
+    @OneToMany(() => Book, (book) => book.category,)
+    books: Book[]
 
 }

@@ -1,5 +1,5 @@
-import { Book } from "src/books/entities/book.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Book } from "src/books/entities/book.entity";
 
 
 @Entity()
@@ -8,7 +8,9 @@ export class Author {
     @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @Column('text')
+    @Column('text',{
+        unique: true
+    })
     fullname: string
     
     @Column('text')

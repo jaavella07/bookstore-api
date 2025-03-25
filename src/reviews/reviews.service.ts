@@ -4,6 +4,7 @@ import { UpdateReviewDto } from './dto/update-review.dto';
 import { Review } from './entities/review.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Injectable()
 export class ReviewsService {
@@ -19,8 +20,13 @@ export class ReviewsService {
     return this.reviewRepository.save(review);
   }
 
-  async findAll() {
-    return await this.reviewRepository.find();
+  async findAll( paginationDto:PaginationDto ) {
+
+    const { limit, offset } = paginationDto
+    return await this.reviewRepository.find({
+      take: limit,
+      skip: offset
+    });
   }
 
   async findOne(id: string) {

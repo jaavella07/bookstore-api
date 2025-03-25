@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -15,12 +16,23 @@ export class CategoriesService {
 
   create(createCategoryDto: CreateCategoryDto) {
 
-    const author = this.categotiesRepository.create(createCategoryDto)
-    return this.categotiesRepository.save(author);
+    try {
+      const author = this.categotiesRepository.create(createCategoryDto)
+      return this.categotiesRepository.save(author);
+
+    } catch (error) {
+      // this.logger.error(error)
+      throw new InternalServerErrorException('Error creating author')
+    }
   }
 
-  async findAll() {
-    return await this.categotiesRepository.find();
+  async findAll(paginationDto: PaginationDto) {
+
+    const { limit, offset } = paginationDto
+    return await this.categotiesRepository.find({
+      take: limit,
+      skip: offset
+    });
   }
 
   async findOne(id: string) {
