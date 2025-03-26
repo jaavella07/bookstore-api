@@ -25,13 +25,13 @@ export class AuthorsService {
 
     } catch (error) {
       this.logger.error(error)
-      throw new InternalServerErrorException('Error creating author')
-    } 
+      this.handleDBError(error);
+    }
 
   }
 
-  async findAll( paginationDto: PaginationDto) {
-    
+  async findAll(paginationDto: PaginationDto) {
+
     const { limit, offset } = paginationDto;
     return await this.authorsRepository.find({
       take: limit,
@@ -50,15 +50,22 @@ export class AuthorsService {
   }
 
   async update(id: string, updateAuthorDto: UpdateAuthorDto) {
-    
-    const author = await this.authorsRepository.findOne({
-      where: { id },
+
+    const author = await this.authorsRepository.preload({
+      id: id,
+      ...updateAuthorDto
     });
 
-    if (!author) throw new NotFoundException('Task not found');
+    if (!author) throw new NotFoundException('Author not found');
 
-    Object.assign(author, updateAuthorDto);
-    return this.authorsRepository.save(author);
+    try {
+      await this.authorsRepository.save(author);
+      return author 
+
+    } catch (error) {
+      this.handleDBError(error);
+
+    }
   }
 
   async remove(id: string) {
@@ -69,4 +76,12 @@ export class AuthorsService {
       message: 'Author removed'
     }
   }
+
+  private handleDBError(error: any) {
+
+    this.logger.error(error)
+    throw new InternalServerErrorException('Unexpected error, check server logs')
+
+  }
+
 }

@@ -27,7 +27,7 @@ export class Book {
     @ManyToOne(() => Category, (category) => category.books,)
     category: Category
 
-    // // reviews: string =de muchos a uno
+    // reviews: string =de muchos a uno
     @ManyToOne(() => Review, (review) => review.books)
     review: Review
 }
