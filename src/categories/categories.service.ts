@@ -17,12 +17,11 @@ export class CategoriesService {
   create(createCategoryDto: CreateCategoryDto) {
 
     try {
-      const author = this.categotiesRepository.create(createCategoryDto)
-      return this.categotiesRepository.save(author);
+      const category = this.categotiesRepository.create(createCategoryDto)
+      return this.categotiesRepository.save(category);
 
     } catch (error) {
-      // this.logger.error(error)
-      throw new InternalServerErrorException('Error creating author')
+      throw new InternalServerErrorException('Error creating category')
     }
   }
 
