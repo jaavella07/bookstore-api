@@ -1,12 +1,15 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { CreateBookDto } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FindManyOptions, ILike, Repository } from 'typeorm';
+
 import { Book } from './entities/book.entity';
-import { Repository } from 'typeorm';
 import { Author } from 'src/authors/entities/author.entity';
 import { Category } from 'src/categories/entities/category.entity';
 import { Review } from 'src/reviews/entities/review.entity';
+import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
+
+import { PaginationDto, FilterBooksDto } from 'src/common/dtos';
 
 @Injectable()
 export class BooksService {
@@ -55,15 +58,23 @@ export class BooksService {
       return this.booksRepository.save(book);
 
     } catch (error) {
-
       throw new InternalServerErrorException('Unexpected error, check server logs')
-
     }
-
   }
 
-  async findAll() {
-    return await this.booksRepository.find();
+  async findAll(filterBookDto: FilterBooksDto) {
+
+    const { limit, offset, title } = filterBookDto;
+
+    const options: FindManyOptions<Book> = {
+      take: limit,
+      skip: offset,
+      where: title ? {
+        title: ILike(`%${title}%`) // Búsqueda insensible a mayúsculas/minúsculas
+      } : {},
+    };
+
+    return await this.booksRepository.find(options);
   }
 
   async findOne(id: string) {
@@ -79,11 +90,33 @@ export class BooksService {
 
   }
 
-  update(id: number, updateBookDto: UpdateBookDto) {
+  async update(id: string, updateBookDto: UpdateBookDto) {
+
+    const book = await this.booksRepository.preload({
+      id: id,
+      ...updateBookDto
+    });
+
+    if (!book) throw new NotFoundException('Book not found');
+
+    try {
+      await this.booksRepository.save(book);
+      return book
+
+    } catch (error) {
+      // this.handleDBError(error);
+
+    }
+
+
     return `This action updates a #${id} book`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} book`;
+  async remove(id: string) {
+    const book = await this.findOne(id)
+    this.booksRepository.remove(book)
+    return {
+      message: 'Book removed'
+    }
   }
 }
