@@ -7,6 +7,7 @@ import { ReviewsModule } from './reviews/reviews.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from './common/common.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -29,7 +30,8 @@ import { CommonModule } from './common/common.module';
     AuthorsModule,
     CategoriesModule,
     ReviewsModule,
-    CommonModule
+    CommonModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
