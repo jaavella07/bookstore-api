@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto, LoginAuthDto } from './dto';
+import { AuthGuard } from '@nestjs/passport';
 
 
 @Controller('auth')
@@ -14,6 +15,28 @@ export class AuthController {
   @Post('login')
   loginUser(@Body() loginAuthDto:LoginAuthDto ) {
     return this.authService.loginUser(loginAuthDto);
+  }
+
+  // @Get('private')
+  // @UseGuards( AuthGuard() )
+  // testingPrivateRoute(){
+
+  //   return {
+  //     ok:true,
+  //     message:'Hola token'
+  //   }
+  // }
+
+  @Get('private')
+  @UseGuards( AuthGuard() )
+  testingPrivateRoute(
+    @Req() request: Express.Request
+  ){
+
+    return {
+      ok:true,
+      message:'Hola token'
+    }
   }
 
 }
